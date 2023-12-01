@@ -155,6 +155,7 @@ bool aWayOut (LABIRINTO lab, int x, int y){
             lab.labirinto[nextX][nextY] = '.';
             try = aWayOut(lab, nextX, nextY); //chama a função recursivamente para fazer o próximo movimento 
             if (!try) lab.labirinto[nextX][nextY] = ' ';
+            imprimirLabirinto(lab);
         } //retorna a posição anterior se  não for possível fazer nenhum dos 4 possíveis movimentos
         k++; // incrementa para testar outro movimento possível na mesma posição
     }
@@ -164,7 +165,6 @@ bool aWayOut (LABIRINTO lab, int x, int y){
 bool resolveLabirinto(LABIRINTO lab){
     int inicioX = lab.inicioX;
     int inicioY = lab.inicioY;
-    int move = 0;
     bool try = aWayOut(lab, inicioX, inicioY);
     if (try == true){
         return true;
