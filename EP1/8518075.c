@@ -164,9 +164,7 @@ bool aWayOut (LABIRINTO lab, int x, int y){
 }
 
 bool resolveLabirinto(LABIRINTO lab){
-    if (aWayOut(lab, lab.inicioX, lab.inicioY)){
-        return true;
-    } else return false;
+    return aWayOut(lab, lab.inicioX, lab.inicioY);
 }
 
 
