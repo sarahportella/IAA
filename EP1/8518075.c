@@ -5,7 +5,7 @@
 /**                                                                 **/
 /**   Primeiro Exercicio-Programa                                   **/
 /**                                                                 **/
-/**   <Sarah Portella Forte>                   <8518075>          **/
+/**   Sarah Portella Forte                   8518075                **/
 /**                                                                 **/
 /*********************************************************************/
 
