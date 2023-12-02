@@ -142,25 +142,28 @@ void imprimirLabirinto(LABIRINTO lab){
    funcoes auxiliar, se desejar.
 */
 bool canMove (LABIRINTO lab, int x, int y){
-    if (lab.labirinto[x][y] == '#' || lab.labirinto[x][y] == '.') return false;
+    if (lab.labirinto[x][y] == '#' ) return false;
     return true;
 }
 
 bool aWayOut (LABIRINTO lab, int x, int y){
     int k = 0; //criação a variável e controle os 4 movimentos possíveis
-    if (lab.labirinto[x][y] == 'F') return true; //testa se a sáida já foi encontrada
-    while (lab.labirinto[x][y] != 'F' || k < 4) { //testa se a saída não foi encontrada e se os 4 movimentos possíveis já foram testados
+    if ( x == lab.fimX && y == lab.fimY) return true; //testa se a sáida já foi encontrada
+    while ( k < 4) { //testa se a saída não foi encontrada e se os 4 movimentos possíveis já foram testados
         int nextX = x + varX[k]; //faz o próximo movimento no eixo x (se houver)
         int nextY = y + varY[k]; //faz o próximo movimento no eixo y (se houver)
-        if (canMove(lab, nextX, nextY)){ // testa se aquele movimento já foi feito (.) ou se não há uma parede (#)
+        if (lab.labirinto[nextX][nextY] == ' ' || lab.labirinto[nextX][nextY] == 'F'){ // testa se aquele movimento já foi feito (.) ou se não há uma parede (#)lab.
+            if ( x == lab.fimX && y == lab.fimY) return true;
             lab.labirinto[nextX][nextY] = '.';
             bool try = aWayOut(lab, nextX, nextY); //chama a função recursivamente para fazer o próximo movimento 
-            if (try == true) return true;
+            if (try == true){
+                return true;
+            } else {
             lab.labirinto[nextX][nextY] = ' ';
-            //imprimirLabirinto(lab);
+            }
+        }
+        k++; 
         } //retorna a posição anterior se  não for possível fazer nenhum dos 4 possíveis movimentos
-        k++; // incrementa para testar outro movimento possível na mesma posição
-    }
     return false;
 }
 
