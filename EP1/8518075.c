@@ -149,16 +149,16 @@ bool aWayOut (LABIRINTO lab, int x, int y){
         int nextX = x + varX[k]; //faz o próximo movimento no eixo x (se houver)
         int nextY = y + varY[k]; //faz o próximo movimento no eixo y (se houver)
         if (lab.labirinto[nextX][nextY] == ' ' || lab.labirinto[nextX][nextY] == 'F'){ // testa se aquele movimento já foi feito (.) ou se não há uma parede (#)lab.
-            if (lab.labirinto[nextX][nextY] == 'F') return true;
-            lab.labirinto[nextX][nextY] = '.';
+            if (lab.labirinto[nextX][nextY] == 'F') return true;// testa se a saída foi encontrada
+            lab.labirinto[nextX][nextY] = '.';  // deixa migalha de pão no caminho percorrido
             bool try = aWayOut(lab, nextX, nextY); //chama a função recursivamente para fazer o próximo movimento 
-            if (try == true){
+            if (try == true){ //testa se a recursão foi bem sucedida
                 return true;
             } else {
-            lab.labirinto[nextX][nextY] = ' ';
+            lab.labirinto[nextX][nextY] = ' '; // retorna a posição anterior caso o movimento não seja possível
             }
         }
-        k++; 
+        k++; //incrementa k para testar outro caminho
         } //retorna a posição anterior se  não for possível fazer nenhum dos 4 possíveis movimentos
     return false;
 }
