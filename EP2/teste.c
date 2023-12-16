@@ -7,8 +7,6 @@
 #define MAX_PAISES 500
 
 typedef int bool;
-
-
 typedef struct aux {
     int id;
     int cor;
@@ -16,17 +14,21 @@ typedef struct aux {
     struct aux** vizinhos;
 } PAIS;
 
-
-
 typedef struct {
     int numPaises;
     PAIS* paises;
 } MAPA;
 
-
-
-
-
+void imprimirMapa(MAPA map){
+    int x, y;
+    printf("Imprimindo mapa\n");
+    for (x=0;x<map.numPaises;x++){
+        printf("Pais %3i[%2i], Vizinhos:", map.paises[x].id, map.paises[x].cor);
+        for (y=0;y<map.paises[x].numVizinhos;y++)
+            printf(" %3i[%2i]", map.paises[x].vizinhos[y]->id, map.paises[x].vizinhos[y]->cor);
+        printf("\n");
+    }
+}
 
 void zerarCores(MAPA map){
     int x;
@@ -35,32 +37,28 @@ void zerarCores(MAPA map){
 }
 
 int resolveGuloso(MAPA map){
-    int coresUsadas = 0;
-    int p, v , c;
-
-    for ( p = 0 ; p < map.numPaises; p++){
-        //printf("1/n");
-        //printf(" numero de paises no mapa é:%i\n", map.numPaises);
-        for( c = 0 ; c < map.numPaises; c++){// itera entre cada pais
-            //printf("2/n");// itera entre as cores
-            for( v= 0; v < map.paises[p].numVizinhos; v++){//itera entre os vizinhos
-                //printf("3/n");
-                if ( map.paises[p].cor == -1 ){
-                 //printf("4/n");
-                    if (map.paises[p].vizinhos[v]->cor != c){ 
+    int p, v , c, livre;
+    map.paises[0].cor = 0;// colore o primeiro pais
+    int coresUsadas= 1;
+    for ( p = 1 ; p < map.numPaises; p++){//itera entre casa pais
+        for( c = 0 ; c < map.numPaises; c++){// itera entre cada cor
+            if ( map.paises[p].cor == -1 ){
+                livre = 0;
+                for( v= 0 ; v < map.paises[p].numVizinhos; v++){//itera entre os vizinhos
+                    if (map.paises[p].vizinhos[v]->cor == c) break;//testa se um vizinho já tem a cor testada atualmente
+                    else livre ++;
+                    if (livre == map.paises[p].numVizinhos){ 
                         map.paises[p].cor = c;
-                        coresUsadas ++;
-                        //printf(" a cor do pais %i é:%i", p, c);
+                        if (coresUsadas <= c) coresUsadas = (c+1);
+                        break;
                     }
-                }
-
-            }
+                }                
+            } else if ( map.paises[p].cor != -1 ) break;
+            
         }
     }
-    printf(" As cores usadas foram :%i", coresUsadas);
     return coresUsadas;
 }
-
 
 bool tenta(MAPA map, int maxCor, int paisAtual) {
     int c, v ;
@@ -81,46 +79,54 @@ bool tenta(MAPA map, int maxCor, int paisAtual) {
 
 
 bool resolveTentativaEErro(MAPA map, int maxCor) {
-    //map.paises[0].cor = 0;
+    map.paises[0].cor = 0;
     return tenta(map, maxCor, 0);
 }
 
-
 int main() {
-    // Inicializando gerador de numeros pseudo aleatorios
-    srand(42);
+    int x;
     int cores;
     int coresGuloso;
-    MAPA map1;
-    map.numPaises =4;
+    MAPA map;
+    map.numPaises =5;
+    int numPaises =5;
     map.paises = (PAIS*) malloc(sizeof(PAIS)*numPaises);
-    for (x=0;x<numPaises;x++){
-        map.paises[x].id = x;  
+    
+    for (x = 0; x < numPaises; x++) {
+        map.paises[x].id = x;
         map.paises[x].cor = -1;
+        map.paises[x].numVizinhos = 0;
+        map.paises[x].vizinhos = (PAIS**)malloc(sizeof(PAIS*) * MAX_PAISES); // Alocar memória para os vizinhos
     }
-    map.paises[0].numvizinhos = 0;
-    map.paises[1].numvizinhos = 2;
-    map.paises[2].numvizinhos = 1;
-    map.paises[3].numvizinhos = 1;
+
+    map.paises[0].numVizinhos = 1;
+    map.paises[1].numVizinhos = 2;
+    map.paises[2].numVizinhos = 2;
+    map.paises[3].numVizinhos = 2;
+    map.paises[4].numVizinhos = 3;
+    map.paises[0].vizinhos[0] = &(map.paises[4]);
     map.paises[1].vizinhos[0] = &(map.paises[2]);
     map.paises[1].vizinhos[1] = &(map.paises[3]);
-    map.paises[2].vizinhos[0] = &(map.paises[1]);
-    map.paises[3].vizinhos[0] = &(map.paises[1]);
+    map.paises[2].vizinhos[0] = &(map.paises[1]); 
+    map.paises[2].vizinhos[1] = &(map.paises[4]);
+    map.paises[3].vizinhos[0] = &(map.paises[1]); 
+    map.paises[3].vizinhos[1] = &(map.paises[4]); 
+    map.paises[4].vizinhos[0] = &(map.paises[0]); 
+    map.paises[4].vizinhos[1] = &(map.paises[2]); 
+    map.paises[4].vizinhos[2] = &(map.paises[3]);
 
-
-
-    imprimirMapa(map1);
-    coresGuloso = resolveGuloso(map1);
+    imprimirMapa(map);
+    coresGuloso = resolveGuloso(map);
     printf("\n\nO algoritmo guloso usou %i cor(es)\n",coresGuloso);
-    imprimirMapa(map1);
+    imprimirMapa(map);
     printf("\n");
 
     for (cores=1; cores<=coresGuloso; cores++){
-        zerarCores(map1);
+        zerarCores(map);
         printf("\n");
-        if (resolveTentativaEErro(map1,cores)) {
+        if (resolveTentativaEErro(map,cores)) {
             printf("Foi possivel resolver o problema com %i cor(es).\n", cores);
-            imprimirMapa(map1);
+            imprimirMapa(map);
             break;
         }
         else printf("Nao foi possivel resolver o problema com %i cor(es).\n", cores);
