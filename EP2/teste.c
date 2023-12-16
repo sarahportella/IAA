@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #define true 1
@@ -37,50 +36,13 @@ void zerarCores(MAPA map){
 }
 
 int resolveGuloso(MAPA map){
-    int p, v , c, livre;
-    map.paises[0].cor = 0;// colore o primeiro pais
-    int coresUsadas= 1;
-    for ( p = 1 ; p < map.numPaises; p++){//itera entre casa pais
-        for( c = 0 ; c < map.numPaises; c++){// itera entre cada cor
-            if ( map.paises[p].cor == -1 ){
-                livre = 0;
-                for( v= 0 ; v < map.paises[p].numVizinhos; v++){//itera entre os vizinhos
-                    if (map.paises[p].vizinhos[v]->cor == c) break;//testa se um vizinho já tem a cor testada atualmente
-                    else livre ++;
-                    if (livre == map.paises[p].numVizinhos){ 
-                        map.paises[p].cor = c;
-                        if (coresUsadas <= c) coresUsadas = (c+1);
-                        break;
-                    }
-                }                
-            } else if ( map.paises[p].cor != -1 ) break;
-            
-        }
-    }
-    return coresUsadas;
+    //complete aqui a função
 }
 
-bool tenta(MAPA map, int maxCor, int paisAtual) {
-    int c, v ;
-    if (paisAtual == map.numPaises) return true;
-
-    for (c = 0; c < maxCor; c++) {
-        for (v = 0; v < map.paises[paisAtual].numVizinhos; v++) {
-            if (map.paises[paisAtual].vizinhos[v]->cor == c) break;
-        }
-        if (v == map.paises[paisAtual].numVizinhos) {
-            map.paises[paisAtual].cor = c;
-            if (tenta(map, maxCor, paisAtual + 1)) return true;
-        }
-    }
-    map.paises[paisAtual].cor = -1;
-    return false;
-}
 
 
 bool resolveTentativaEErro(MAPA map, int maxCor) {
-    map.paises[0].cor = 0;
-    return tenta(map, maxCor, 0);
+    //complete aqui a função
 }
 
 int main() {
