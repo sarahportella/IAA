@@ -72,7 +72,6 @@ MAPA criarMapa(int numPaises, int mediaVizinhos){
         for (y=0;y<numPaises;y++)
             vizinhanca[x][y] = 0;
             
-            \
     total = numPaises*mediaVizinhos/2;
     for (v=0;v<total;v++){
         x = rand()%numPaises;
@@ -184,8 +183,16 @@ int resolveGuloso(MAPA map){
 */
 
 bool tenta(MAPA map, int maxCor, int paisAtual) {
-    int c, v ;
-    if (paisAtual == map.numPaises) return true;
+    int c, v;
+    int coresUsadas = 1;
+    if (paisAtual == map.numPaises){
+        for (v = 0; v < map.numPaises; v++){
+            if (map.paises[v].cor >= coresUsadas) coresUsadas = map.paises[v].cor+1;
+        }
+        //printf("Cores usadas: %i", coresUsadas);
+        if ( coresUsadas <= maxCor) return true;
+        //return true;
+    }  
 
     for (c = 0; c < maxCor; c++) {
         for (v = 0; v < map.paises[paisAtual].numVizinhos; v++) {
