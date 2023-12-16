@@ -182,11 +182,27 @@ int resolveGuloso(MAPA map){
    pais atual com a ``cor'' -1 e retornar (backtracking) para tentar outra 
    coloracao (tentar, por exemplo, colorir o pais anterior com outra cor.
 */
-bool resolveTentativaEErro(MAPA map, int maxCor){
 
-    	/* COMPLETE A IMPLEMENTACAO DA FUNCAO*/
+bool tenta(MAPA map, int maxCor, int paisAtual) {
+    int c, v ;
+    if (paisAtual == map.numPaises) return true;
 
+    for (c = 0; c < maxCor; c++) {
+        for (v = 0; v < map.paises[paisAtual].numVizinhos; v++) {
+            if (map.paises[paisAtual].vizinhos[v]->cor == c) break;
+        }
+        if (v == map.paises[paisAtual].numVizinhos) {
+            map.paises[paisAtual].cor = c;
+            if (tenta(map, maxCor, paisAtual + 1)) return true;
+        }
+    }
+    map.paises[paisAtual].cor = -1;
     return false;
+}
+
+bool resolveTentativaEErro(MAPA map, int maxCor) {
+    map.paises[0].cor = 0;
+    return tenta(map, maxCor, 1);
 }
 
 
